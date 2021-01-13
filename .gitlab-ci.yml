@@ -1,0 +1,27 @@
+build-docker-master:
+  image: docker:19.03.1
+  stage: build
+  services:
+    - docker:19.03.1-dind
+  before_script:
+    - export DOCKER_REGISTRY_USER=$CI_REGISTRY_USER # built-in GitLab Registry User
+    - export DOCKER_REGISTRY_PASSWORD=$CI_REGISTRY_PASSWORD # built-in GitLab Registry Password
+    - export DOCKER_REGISTRY_URL=$CI_REGISTRY # built-in GitLab Registry URL
+    - export COMMIT_HASH=$CI_COMMIT_SHA # Your current commit sha
+    - export IMAGE_NAME_WITH_REGISTRY_PREFIX=$CI_REGISTRY_IMAGE # Your repository prefixed with GitLab Registry URL
+    - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_URL # Instructs GitLab to login to its registry
+
+  script:
+    - case "$CI_COMMIT_TAG" in server*) export APP_DEPLOY_NAME=$CAPROVER_APP_SERVER ;; *) export APP_DEPLOY_NAME="$CAPROVER_APP_CLIENT" ;; esac
+    - case "$CI_COMMIT_TAG" in server*) export DOCKERFILE_FILE_NAME="DockerfileServer" ;; *) export DOCKERFILE_FILE_NAME="DockerfileClient" ;; esac
+    - echo "Building..." # MAKE SURE NO SPACE ON EITHER SIDE OF = IN THE FOLLOWING LINE
+    - echo $APP_DEPLOY_NAME # MAKE SURE NO SPACE ON EITHER SIDE OF = IN THE FOLLOWING LINE
+    - export CONTAINER_FULL_IMAGE_NAME_WITH_TAG=$IMAGE_NAME_WITH_REGISTRY_PREFIX/my-build-image:$COMMIT_HASH
+    - docker build -f ./$DOCKERFILE_FILE_NAME --pull -t built-image-name .
+    - docker tag built-image-name "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
+    - docker push "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
+    - echo $CONTAINER_FULL_IMAGE_NAME_WITH_TAG
+    - echo "Deploying on CapRover..."
+    - docker run caprover/cli-caprover:v2.1.1 caprover deploy --caproverUrl $CAPROVER_URL --caproverPassword $CAPROVER_PASSWORD --caproverApp $APP_DEPLOY_NAME --imageName $CONTAINER_FULL_IMAGE_NAME_WITH_TAG
+  rules: 
+    - if: '$CI_COMMIT_TAG=~/(client.*)|(server.*)/'
