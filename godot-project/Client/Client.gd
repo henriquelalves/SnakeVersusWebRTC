@@ -23,6 +23,8 @@ func _on_players_ready():
 	process_match_start()
 
 func _on_game_over():
+	if _game == null: return
+	
 	_relay_client.disconnect_from_server()
 	
 	_game.queue_free()

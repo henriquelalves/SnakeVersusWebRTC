@@ -31,7 +31,7 @@ func connect_to_server():
 	uri = "ws://" + websocket_url + ":" + str(port)
 	
 	players_ready = false
-	_rtc = load("res://WebsocketRelay/WebRTCClient.tscn").instance()
+	_rtc = load("res://MultiplayerFramework/WebRTCClient.tscn").instance()
 	_match = []
 	_rtc_peers = {}
 	_id = 0
