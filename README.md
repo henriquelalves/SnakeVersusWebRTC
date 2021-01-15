@@ -1,7 +1,7 @@
 # SnakeVersusWebRTC
 A simple Godot Peer-to-Peer browser game, made with WebRTC. I wrote an article on the project's multiplayer architecture [on my write.as blog](https://write.as/perons/creating-a-peer-to-peer-snake-game-with-godot-webrtc). You can play the project on it's [itch.io page](https://perons.itch.io/snake-versus).
 
-[Imgur](https://i.imgur.com/N6kT1hS.png)
+![Game Screenshot](https://i.imgur.com/N6kT1hS.png)
 
 The two main folders are:
 
