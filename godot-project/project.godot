@@ -45,7 +45,7 @@ IsClient=true
 [application]
 
 config/name="Snake Versus"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Client/Client.tscn"
 config/icon="res://Client/Assets/Tiles/tile_0018.png"
 
 [rendering]

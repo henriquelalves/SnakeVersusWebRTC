@@ -4,15 +4,10 @@
 [ext_resource path="res://Client/Client.gd" type="Script" id=2]
 [ext_resource path="res://Client/Assets/title_font.tres" type="DynamicFont" id=3]
 
-
-
 [node name="Client" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="WebsocketClient" parent="." instance=ExtResource( 1 )]
 
